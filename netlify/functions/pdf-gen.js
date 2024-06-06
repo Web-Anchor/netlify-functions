@@ -1,4 +1,5 @@
-const puppeteer = require('puppeteer');
+import chromium from '@sparticuz/chromium';
+import puppeteer from 'puppeteer-core';
 
 // https://www.blackspike.com/blog/netlify-puppeteer/
 // https://github.com/blackspike/netlify-puppeteer-demo
@@ -6,14 +7,42 @@ const puppeteer = require('puppeteer');
 exports.handler = async (event, context) => {
   allowedMethods({ method: event.httpMethod, allowedMethods: ['POST'] });
 
+  const template = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>PDF</title>
+      </head>
+      <body>
+        <h1>PDF</h1>
+        <p>PDF content</p>
+      </body>
+    </html>
+  `;
+
   const { body } = JSON.parse(event?.body ?? {});
-  const html = body?.html;
+  const html = body?.html || template;
+
   const authHeader = event.headers.authorization; // 📌  Authorization header
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath:
+      process.env.CHROME_EXECUTABLE_PATH ||
+      (await chromium.executablePath(
+        '/var/task/node_modules/@sparticuz/chromium/bin'
+      )),
+  });
   const page = await browser.newPage();
-  await page.goto('https://www.example.com');
+
+  // get google.com screenshot
+  await page.goto('https://google.com');
   const screenshot = await page.screenshot();
+
+  // get pdf buffer from html
+  await page.setContent(html);
+  const pdfBuffer = await page.pdf({ format: 'A4' });
 
   await browser.close();
 
@@ -21,6 +50,7 @@ exports.handler = async (event, context) => {
     statusCode: 200,
     body: JSON.stringify({
       screenshot: screenshot.toString('base64'),
+      pdf: pdfBuffer.toString('base64'),
       authHeader,
       html,
     }),

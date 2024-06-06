@@ -1,6 +1,7 @@
 [build]
   command = "# no build command" # no build command
   functions = "netlify/functions"  # Specify the directory where Netlify functions are located
+  publish = "."
 
 [[redirects]]
   from = "/api/*"  # Redirect API requests to Netlify functions
