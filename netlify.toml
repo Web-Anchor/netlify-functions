@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"  # Install dependencies and build the functions
+  command = "# no build command" # no build command
   functions = "netlify/functions"  # Specify the directory where Netlify functions are located
   publish = "public"  # Specify the directory to publish (not needed for function-only projects)
 
