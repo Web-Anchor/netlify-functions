@@ -15,10 +15,6 @@
     Access-Control-Allow-Methods = "GET, POST, PUT"  # Add allowed methods if needed
     Access-Control-Allow-Headers = "Content-Type"  # Add allowed headers if needed
     Cache-Control = "public, max-age=0, must-revalidate"
-  for = "/*"
-    [headers.values]
-    Access-Control-Allow-Origin = "*"  # Add CORS headers for all routes
-    Cache-Control = "public, max-age=0, must-revalidate"
 
 [functions]
     node_bundler = "esbuild"
