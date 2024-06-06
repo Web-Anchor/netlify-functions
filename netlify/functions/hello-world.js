@@ -1,15 +1,16 @@
 export const handler = async (request, context) => {
-  return new Response(
-    {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'Hello World',
-      }),
+  const body = JSON.parse(request.body);
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTION',
     },
-    {
-      headers: {
-        'access-control-allow-origin': '*',
-      },
-    }
-  );
+    body: JSON.stringify({
+      message: 'Hello World!',
+      body,
+    }),
+  };
 };
