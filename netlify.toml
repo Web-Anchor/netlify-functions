@@ -1,7 +1,7 @@
 [build]
-	command = "# no build command"
+	command = "npm run build"
 	functions = "netlify/functions"
 	publish = "public"
 
 [functions]
-        node_bundler = "esbuild"
+    node_bundler = "esbuild"
