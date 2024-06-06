@@ -40,6 +40,29 @@ exports.handler = async (event, context) => {
 };
 ```
 
+### Create the netlify.toml file:
+
+- The [build] section specifies the build settings for your Node.js project, including the build command (npm run build) and the directory to publish (dist).
+- The [[redirects]] section defines a URL redirect from /old-url to /new-url with a 301 status code.
+- The [[headers]] section sets the Cache-Control header for all files to ensure they are not cached.
+
+```toml
+[build]
+  command = "npm run build"  # Specify the build command for your project
+  publish = "dist"  # Specify the directory to publish
+
+[[redirects]]
+  from = "/old-url"
+  to = "/new-url"
+  status = 301
+
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+```
+
 ### Deploy the function to Netlify:
 
 - Make sure you have your project set up on GitHub and linked to Netlify for automatic deployments.
