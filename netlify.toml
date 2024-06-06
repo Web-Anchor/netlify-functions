@@ -9,6 +9,12 @@
   status = 200
 
 [[headers]]
+  for = "/.netlify/functions/pdf-gen"  # Specify the function path you want to allow CORS for
+    [headers.values]
+    Access-Control-Allow-Origin = ["http://localhost:4321", "https://example.com"]  # Add a list of origins you want to allow
+    Access-Control-Allow-Methods = "GET, POST, PUT"  # Add allowed methods if needed
+    Access-Control-Allow-Headers = "Content-Type"  # Add allowed headers if needed
+    Cache-Control = "public, max-age=0, must-revalidate"
   for = "/*"
     [headers.values]
     Access-Control-Allow-Origin = "*"  # Add CORS headers for all routes
