@@ -1,9 +1,15 @@
-export const handler = async () => {
-  const response = new Response();
-
-  response.headers.set('Access-Control-Allow-Origin', '*'); // allow all origins
-
-  return response.status(200).json({
-    message: 'Hello World!',
-  });
+export const handler = async (request, context) => {
+  return new Response(
+    {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Hello World',
+      }),
+    },
+    {
+      headers: {
+        'access-control-allow-origin': '*',
+      },
+    }
+  );
 };
