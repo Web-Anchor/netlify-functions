@@ -1,7 +1,18 @@
 [build]
-	command = "npm run build"
-	functions = "netlify/functions"
-	publish = "public"
+  command = "npm install && npm run build"  # Install dependencies and build the functions
+  functions = "netlify/functions"  # Specify the directory where Netlify functions are located
+  publish = "public"  # Specify the directory to publish (not needed for function-only projects)
+
+[[redirects]]
+  from = "/api/*"  # Redirect API requests to Netlify functions
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"  # Add CORS headers for all routes
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [functions]
     node_bundler = "esbuild"

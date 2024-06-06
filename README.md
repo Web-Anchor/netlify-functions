@@ -1,5 +1,17 @@
 ## [Creating netlify functions](https://www.netlify.com/blog/intro-to-serverless-functions/)
 
+### Project structure:
+
+```
+project-root/
+├── netlify/  (folder containing your Netlify functions)
+│   └── exampleFunction.js
+├── node_modules/  (folder containing your Node.js dependencies)
+├── package.json
+└── netlify.toml
+
+```
+
 To create a new Netlify function using Netlify's Lambda functions in VS Code with Puppeteer, you'll need to follow these steps:
 
 ### Set up a new project directory and initialize it:
@@ -48,18 +60,23 @@ exports.handler = async (event, context) => {
 
 ```toml
 [build]
-  command = "npm run build"  # Specify the build command for your project
-  publish = "dist"  # Specify the directory to publish
+  command = "npm install && npm run build"  # Install dependencies and build the functions
+  functions = "netlify/functions"  # Specify the directory where Netlify functions are located
+  publish = "public"  # Specify the directory to publish (not needed for function-only projects)
 
 [[redirects]]
-  from = "/old-url"
-  to = "/new-url"
-  status = 301
+  from = "/api/*"  # Redirect API requests to Netlify functions
+  to = "/.netlify/functions/:splat"
+  status = 200
 
 [[headers]]
   for = "/*"
     [headers.values]
+    Access-Control-Allow-Origin = "*"  # Add CORS headers for all routes
     Cache-Control = "public, max-age=0, must-revalidate"
+
+[functions]
+    node_bundler = "esbuild"
 
 ```
 
