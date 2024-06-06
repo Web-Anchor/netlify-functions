@@ -1,9 +1,12 @@
 const puppeteer = require('puppeteer');
 
+// https://www.blackspike.com/blog/netlify-puppeteer/
+// https://github.com/blackspike/netlify-puppeteer-demo
+
 exports.handler = async (event, context) => {
   allowedMethods({ method: event.httpMethod, allowedMethods: ['POST'] });
 
-  const { body } = JSON.parse(event.body);
+  const { body } = JSON.parse(event?.body ?? {});
   const html = body?.html;
   const authHeader = event.headers.authorization; // 📌  Authorization header
 

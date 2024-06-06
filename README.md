@@ -86,6 +86,10 @@ exports.handler = async (event, context) => {
 - Commit your changes to Git and push them to GitHub.
 - Netlify will automatically detect the Netlify function in your project and deploy it.
 
+### .env file
+
+`CHROME_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"`
+
 ### Test the function:
 
 - Once deployed, you can test the function by accessing its URL provided by Netlify.

@@ -6,11 +6,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "anchor-labs",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@sparticuz/chromium": "^123.0.1",
     "axios": "^1.7.2",
-    "puppeteer": "^22.10.0"
+    "puppeteer-core": "^22.10.0"
   }
 }
