@@ -53,7 +53,8 @@ exports.handler = async (req, context) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        pdf: pdfBuffer.toString('base64'), // Data Transfer: Base64 Data Transfer
+        base64: pdfBuffer.toString('base64'), // Data Transfer: Base64 Data Transfer
+        pdfBuffer,
         html,
       }),
     };
