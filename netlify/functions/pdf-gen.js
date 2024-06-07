@@ -50,7 +50,7 @@ exports.handler = async (event, context) => {
     statusCode: 200,
     body: JSON.stringify({
       screenshot: screenshot.toString('base64'),
-      pdf: pdfBuffer.toString('base64'),
+      pdf: pdfBuffer.toString('base64'), // Data Transfer: Base64 Data Transfer
       authHeader,
       html,
     }),
@@ -65,18 +65,6 @@ function allowedMethods({ method, allowedMethods = [] }) {
     return {
       statusCode: 405,
       body: JSON.stringify({ message: 'Method Not Allowed' }),
-    };
-  }
-}
-
-function validateAuthorization({ authHeader }) {
-  // --------------------------------------------------------------------------------
-  // 📌  authHeader types string
-  // --------------------------------------------------------------------------------
-  if (authHeader !== 'Bearer secret') {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ message: 'Unauthorized' }),
     };
   }
 }

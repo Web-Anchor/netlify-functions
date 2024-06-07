@@ -12,6 +12,13 @@ project-root/
 
 ```
 
+### Locally testing functions
+
+```cli
+
+netlify dev
+```
+
 To create a new Netlify function using Netlify's Lambda functions in VS Code with Puppeteer, you'll need to follow these steps:
 
 ### Set up a new project directory and initialize it:
