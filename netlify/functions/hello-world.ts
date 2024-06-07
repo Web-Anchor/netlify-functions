@@ -4,14 +4,14 @@ import {
   validateAuthorization,
 } from '../../lib/helpers';
 
-export const handler = async (request, context) => {
+export const handler = async (req, context) => {
   try {
     await allowedMethods({
-      method: request.httpMethod,
+      method: req.httpMethod,
       allowedMethods: ['POST'],
     });
-    await validateAuthorization(request);
-    const body = requestBody(request);
+    await validateAuthorization(req);
+    const body = requestBody(req);
 
     return {
       statusCode: 200,

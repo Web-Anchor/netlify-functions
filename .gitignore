@@ -33,3 +33,7 @@ node_modules/
 
 # Local Netlify folder
 .netlify
+
+# env variables
+.env
+.env.*
