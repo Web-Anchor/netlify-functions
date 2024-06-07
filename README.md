@@ -1,5 +1,7 @@
 ## [Creating netlify functions](https://www.netlify.com/blog/intro-to-serverless-functions/)
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d40e6b0f-cce4-4424-8820-0629776fa5be/deploy-status)](https://app.netlify.com/sites/netlify-lambdas/deploys)
+
 ### Project structure:
 
 ```
