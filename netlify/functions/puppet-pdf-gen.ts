@@ -34,6 +34,7 @@ exports.handler = async (req, context) => {
     await validateAuthorization(req);
     const body = requestBody(req);
     const id = body?.id || Date.now() + Math.random();
+    const fileType = body?.fileType || 'pdf';
 
     const html = template;
 
@@ -62,7 +63,7 @@ exports.handler = async (req, context) => {
     formData.append('file', blob, 'file.pdf');
 
     const upload = await axios.put(
-      `https://storage.bunnycdn.com/${process.env.BUNNYCDN_STORAGE_ZONE_NAME}/${id}`,
+      `https://storage.bunnycdn.com/${process.env.BUNNYCDN_STORAGE_ZONE_NAME}/${id}.${fileType}`,
       formData,
       {
         headers: {
@@ -71,9 +72,6 @@ exports.handler = async (req, context) => {
         },
       }
     );
-
-    console.log('🚀 _upload', upload);
-
     await browser.close();
 
     return {
@@ -81,12 +79,11 @@ exports.handler = async (req, context) => {
       body: JSON.stringify({
         // base64: pdfBuffer.toString('base64'),
         bufferLength: pdfBuffer.length,
-        url: `https://${process.env.BUNNYCDN_STORAGE_ZONE_NAME}.b-cdn.net/${id}`,
+        url: `https://${process.env.BUNNYCDN_STORAGE_CDN_NAME}.b-cdn.net/${id}.${fileType}`,
       }),
     };
   } catch (error) {
     console.log('🚨 error', error);
-
     return {
       statusCode: error?.statusCode ?? 500,
       body: JSON.stringify({ message: error.message }),
