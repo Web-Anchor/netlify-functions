@@ -5,7 +5,6 @@ import {
   requestBody,
   validateAuthorization,
 } from '../../lib/helpers';
-import { gzip } from 'node-zopfli';
 
 // https://www.blackspike.com/blog/netlify-puppeteer/
 // https://github.com/blackspike/netlify-puppeteer-demo
@@ -53,18 +52,15 @@ exports.handler = async (req, context) => {
     const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true }); // Set the PDF format
 
     // --------------------------------------------------------------------------------
-    // 📌  PDF compression
+    // 📌  TODO: Buffer compression
     // --------------------------------------------------------------------------------
-    const compressedPdfBuffer = await gzip(pdfBuffer);
-    const compressedBase64 =
-      Buffer.from(compressedPdfBuffer).toString('base64');
 
     await browser.close();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        base64: compressedBase64,
+        base64: pdfBuffer.toString('base64'),
       }),
     };
   } catch (error) {
