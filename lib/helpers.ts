@@ -22,7 +22,7 @@ export async function validateAuthorization(req?: any) {
   const token = authorization.split(' ')[1];
   console.log('🔑 token', token);
 
-  if (token !== 'my-secret-token') {
+  if (!token) {
     throw new CustomError('Unauthorized', 401);
   }
 }

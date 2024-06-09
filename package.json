@@ -16,6 +16,7 @@
     "@sparticuz/chromium": "^123.0.1",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
+    "node-zopfli": "^2.1.4",
     "puppeteer-core": "^22.10.0"
   }
 }

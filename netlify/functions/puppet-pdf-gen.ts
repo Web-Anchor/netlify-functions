@@ -5,11 +5,12 @@ import {
   requestBody,
   validateAuthorization,
 } from '../../lib/helpers';
+import { gzip } from 'node-zopfli';
 
 // https://www.blackspike.com/blog/netlify-puppeteer/
 // https://github.com/blackspike/netlify-puppeteer-demo
 
-const fallBackTemplate = `
+const template = `
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -19,8 +20,9 @@ const fallBackTemplate = `
       <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     </head>
     <body>
-      <div class="container mx-auto h-full bg-green-100">
-        <h1 class="text-2xl font-bold">Template not Provided!</h1>
+      <div class="mx-auto h-full">
+        <h1 class="text-4xl font-bold text-gray-800">PDF Generator</h1>
+        <p class="text-gray-600">Please provide a template.</p>
       </div>
     </body>
   </html>
@@ -29,10 +31,10 @@ const fallBackTemplate = `
 exports.handler = async (req, context) => {
   try {
     await allowedMethods({ method: req.httpMethod, allowedMethods: ['POST'] });
-    // await validateAuthorization(req);
+    await validateAuthorization(req);
     const body = requestBody(req);
 
-    const html = body?.html || fallBackTemplate;
+    const html = body?.html || template;
 
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -45,17 +47,24 @@ exports.handler = async (req, context) => {
     });
     const page = await browser.newPage();
 
-    await page.setContent(html); // Set the HTML content of the page
-    const pdfBuffer = await page.pdf({ format: 'A4' }); // Set the PDF format
+    await page.setContent(html, {
+      waitUntil: 'domcontentloaded',
+    }); // Set the HTML content of the page
+    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true }); // Set the PDF format
+
+    // --------------------------------------------------------------------------------
+    // 📌  PDF compression
+    // --------------------------------------------------------------------------------
+    const compressedPdfBuffer = await gzip(pdfBuffer);
+    const compressedBase64 =
+      Buffer.from(compressedPdfBuffer).toString('base64');
 
     await browser.close();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        base64: pdfBuffer.toString('base64'), // Data Transfer: Base64 Data Transfer
-        pdfBuffer,
-        html,
+        base64: compressedBase64,
       }),
     };
   } catch (error) {
