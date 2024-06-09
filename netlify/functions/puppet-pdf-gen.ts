@@ -57,12 +57,6 @@ exports.handler = async (req, context) => {
     // 📌  TODO: Buffer compression
     // 📌  Upload the PDF to storage.bunnycdn.com
     // --------------------------------------------------------------------------------
-    console.log(
-      'Uploading PDF to BunnyCDN...',
-      pdfBuffer.length,
-      process.env.BUNNYCDN_STORAGE_ZONE_NAME
-    );
-    // to form data from buffer
     const formData = new FormData();
     const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
     formData.append('file', blob, 'file.pdf');
@@ -85,7 +79,8 @@ exports.handler = async (req, context) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        base64: pdfBuffer.toString('base64'),
+        // base64: pdfBuffer.toString('base64'),
+        bufferLength: pdfBuffer.length,
         url: `https://${process.env.BUNNYCDN_STORAGE_ZONE_NAME}.b-cdn.net/${id}`,
       }),
     };
