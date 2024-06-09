@@ -22,8 +22,12 @@ const template = `
     <body>
       <div class="mx-auto h-full">
         <h1 class="text-4xl font-bold text-gray-800">PDF Generator</h1>
-        <p class="text-gray-600">Please provide a template.</p>
+        <p class="text-gray-600">Please provide a template to generate a PDF.</p>
       </div>
+
+      <footer class="fixed bottom-0 w-full bg-gray-100 p-4">
+        <p class="text-center text-gray-600">© ${new Date().getFullYear()} PDF Generator</p>
+      </footer>
     </body>
   </html>
 `;
@@ -36,7 +40,7 @@ exports.handler = async (req, context) => {
     const id = body?.id || Date.now() + Math.random();
     const fileType = body?.fileType || 'pdf';
 
-    const html = template;
+    const html = body?.html || template;
 
     const browser = await puppeteer.launch({
       args: chromium.args,
