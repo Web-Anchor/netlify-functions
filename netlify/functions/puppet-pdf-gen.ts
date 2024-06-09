@@ -5,6 +5,7 @@ import {
   requestBody,
   validateAuthorization,
 } from '../../lib/helpers';
+import axios from 'axios';
 
 // https://www.blackspike.com/blog/netlify-puppeteer/
 // https://github.com/blackspike/netlify-puppeteer-demo
@@ -32,8 +33,9 @@ exports.handler = async (req, context) => {
     await allowedMethods({ method: req.httpMethod, allowedMethods: ['POST'] });
     await validateAuthorization(req);
     const body = requestBody(req);
+    const id = body?.id || Date.now() + Math.random();
 
-    const html = body?.html || template;
+    const html = template;
 
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -53,7 +55,30 @@ exports.handler = async (req, context) => {
 
     // --------------------------------------------------------------------------------
     // 📌  TODO: Buffer compression
+    // 📌  Upload the PDF to storage.bunnycdn.com
     // --------------------------------------------------------------------------------
+    console.log(
+      'Uploading PDF to BunnyCDN...',
+      pdfBuffer.length,
+      process.env.BUNNYCDN_STORAGE_ZONE_NAME
+    );
+    // to form data from buffer
+    const formData = new FormData();
+    const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+    formData.append('file', blob, 'file.pdf');
+
+    const upload = await axios.put(
+      `https://storage.bunnycdn.com/${process.env.BUNNYCDN_STORAGE_ZONE_NAME}/${id}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'application/pdf',
+          AccessKey: process.env.BUNNYCDN_STORAGE_ACCESS_KEY,
+        },
+      }
+    );
+
+    console.log('🚀 _upload', upload);
 
     await browser.close();
 
@@ -61,9 +86,12 @@ exports.handler = async (req, context) => {
       statusCode: 200,
       body: JSON.stringify({
         base64: pdfBuffer.toString('base64'),
+        url: `https://${process.env.BUNNYCDN_STORAGE_ZONE_NAME}.b-cdn.net/${id}`,
       }),
     };
   } catch (error) {
+    console.log('🚨 error', error);
+
     return {
       statusCode: error?.statusCode ?? 500,
       body: JSON.stringify({ message: error.message }),
