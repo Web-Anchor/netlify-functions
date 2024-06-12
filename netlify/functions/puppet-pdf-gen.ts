@@ -52,6 +52,12 @@ exports.handler = async (req, context) => {
         )),
     });
     const page = await browser.newPage();
+    await page.goto('about:blank'); // Go to a blank page
+
+    // 📌 Inject style tag with the content of Tailwind CSS
+    await page.addStyleTag({
+      url: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+    });
 
     await page.setContent(html, {
       waitUntil: 'domcontentloaded',
