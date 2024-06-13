@@ -52,16 +52,7 @@ exports.handler = async (req, context) => {
         )),
     });
     const page = await browser.newPage();
-    // await page.goto('about:blank'); // Go to a blank page
 
-    // // 📌 Inject style tag with the content of Tailwind CSS
-    // await page.addStyleTag({
-    //   url: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
-    // });
-
-    // await page.setContent(html, {
-    //   waitUntil: 'domcontentloaded',
-    // }); // Set the HTML content of the page
     // --------------------------------------------------------------------------------
     // 📌 Set the HTML content of the page
     // page.goto with a data: URL, Puppeteer will trigger network requests to load external resources like images, scripts, and stylesheets
