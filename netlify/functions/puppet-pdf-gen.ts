@@ -52,16 +52,21 @@ exports.handler = async (req, context) => {
         )),
     });
     const page = await browser.newPage();
-    await page.goto('about:blank'); // Go to a blank page
+    // await page.goto('about:blank'); // Go to a blank page
 
-    // 📌 Inject style tag with the content of Tailwind CSS
-    await page.addStyleTag({
-      url: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
-    });
+    // // 📌 Inject style tag with the content of Tailwind CSS
+    // await page.addStyleTag({
+    //   url: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+    // });
 
-    await page.setContent(html, {
-      waitUntil: 'domcontentloaded',
-    }); // Set the HTML content of the page
+    // await page.setContent(html, {
+    //   waitUntil: 'domcontentloaded',
+    // }); // Set the HTML content of the page
+    // --------------------------------------------------------------------------------
+    // 📌 Set the HTML content of the page
+    // page.goto with a data: URL, Puppeteer will trigger network requests to load external resources like images, scripts, and stylesheets
+    // --------------------------------------------------------------------------------
+    await page.goto(`data:text/html,${html}`, { waitUntil: 'networkidle0' });
     const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true }); // Set the PDF format
 
     // --------------------------------------------------------------------------------
@@ -72,7 +77,7 @@ exports.handler = async (req, context) => {
     const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
     formData.append('file', blob, 'file.pdf');
 
-    const upload = await axios.put(
+    await axios.put(
       `https://storage.bunnycdn.com/${process.env.BUNNYCDN_STORAGE_ZONE_NAME}/${id}.${fileType}`,
       formData,
       {
@@ -87,7 +92,6 @@ exports.handler = async (req, context) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        // base64: pdfBuffer.toString('base64'),
         bufferLength: pdfBuffer.length,
         url: `https://${process.env.BUNNYCDN_STORAGE_CDN_NAME}.b-cdn.net/${id}.${fileType}`,
       }),
