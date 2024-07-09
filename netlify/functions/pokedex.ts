@@ -6,7 +6,7 @@ import {
 
 const axios = require('axios');
 
-exports.handler = async (req, context) => {
+exports.handler = async (req: { httpMethod: any }, context: any) => {
   try {
     await allowedMethods({ method: req.httpMethod, allowedMethods: ['POST'] });
     await validateAuthorization(req);
@@ -23,7 +23,7 @@ exports.handler = async (req, context) => {
         body,
       }),
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       statusCode: error?.statusCode ?? 500,
       body: JSON.stringify({ message: error.message }),

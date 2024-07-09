@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["dom", "es6"],
+    "allowJs": true,
+    "rootDir": "./",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./", // Base directory to resolve non-relative module names
+    "paths": {
+      "@functions/*": ["netlify/functions/*"], // Example path alias
+      "@lib/*": ["lib/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

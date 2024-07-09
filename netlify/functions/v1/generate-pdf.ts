@@ -4,7 +4,7 @@ import {
   allowedMethods,
   requestBody,
   validateAuthorization,
-} from '../../lib/helpers';
+} from '@lib/helpers';
 import axios from 'axios';
 import { noFoundTemplate } from '@lib/templates';
 

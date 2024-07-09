@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "commit": "./commit.sh",
     "dev": "netlify dev",
-    "build": "netlify-lambda build functions"
+    "build": "netlify build functions"
   },
   "keywords": [],
   "author": "anchor-labs",

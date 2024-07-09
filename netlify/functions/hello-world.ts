@@ -10,7 +10,7 @@ const HEADERS = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
 };
 
-export const handler = async (req, context) => {
+export const handler = async (req: { httpMethod: any }, context: any) => {
   try {
     await allowedMethods({
       method: req.httpMethod,
@@ -29,7 +29,7 @@ export const handler = async (req, context) => {
       }),
       headers: HEADERS,
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       statusCode: error?.statusCode ?? 500,
       body: JSON.stringify({ message: error.message }),

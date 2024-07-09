@@ -32,7 +32,7 @@ class CustomError extends Error {
   // 📌  Define custom error type/class
   // --------------------------------------------------------------------------------
   statusCode: number;
-  constructor(message, statusCode) {
+  constructor(message: string | undefined, statusCode: number) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode;
